@@ -1,0 +1,8 @@
+flask>=3.0
+flask-cors>=4.0
+deepface>=0.0.93
+tensorflow>=2.15
+tf-keras>=2.16
+opencv-python>=4.9
+numpy>=1.26
+Pillow>=10.0

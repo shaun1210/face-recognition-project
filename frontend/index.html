@@ -4,73 +4,120 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DBIT Attendance System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:        #0d0f1a;
-      --surface:   #161929;
-      --card:      #1e2235;
-      --border:    #2a2f4a;
-      --accent:    #4f8ef7;
-      --green:     #22c55e;
-      --red:       #ef4444;
-      --amber:     #f59e0b;
-      --text:      #e2e8f0;
-      --muted:     #64748b;
-      --radius:    12px;
+      --bg:        #0a0b14;
+      --surface:   #12131f;
+      --card:      #181a2a;
+      --card-hover: #1e2035;
+      --border:    #252840;
+      --border-focus: #4f6ef7;
+      --accent:    #5b7cf7;
+      --accent-dim: #5b7cf720;
+      --green:     #34d399;
+      --green-dim: #34d39915;
+      --red:       #f87171;
+      --red-dim:   #f8717115;
+      --amber:     #fbbf24;
+      --amber-dim: #fbbf2415;
+      --purple:    #a78bfa;
+      --text:      #e8ecf4;
+      --text-secondary: #8892b0;
+      --muted:     #5a6380;
+      --radius:    14px;
+      --radius-sm: 8px;
+      --shadow:    0 4px 24px rgba(0,0,0,.35);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
+      --transition: all .25s cubic-bezier(.4,0,.2,1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px 16px 48px;
+      padding: 20px 16px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, #5b7cf710, transparent),
+        linear-gradient(180deg, #0a0b14, #0d0e1a);
     }
 
     /* ── Header ── */
     header {
-      max-width: 1100px;
-      margin: 0 auto 28px;
+      max-width: 1200px;
+      margin: 0 auto 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
+      padding: 0 4px;
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 14px; }
     .logo-icon {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, var(--accent), #7c3aed);
-      border-radius: 10px;
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 14px;
       display: grid; place-items: center;
-      font-size: 22px;
+      font-size: 24px;
+      box-shadow: 0 4px 16px #5b7cf730;
     }
-    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
-    h1 span { color: var(--accent); }
+    .logo-text h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .logo-text h1 span { color: var(--accent); }
+    .logo-text p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
 
+    .header-right { display: flex; align-items: center; gap: 12px; }
     .chip {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      background: #4f8ef718;
+      font-weight: 500;
+      background: var(--accent-dim);
       color: var(--accent);
-      border: 1px solid #4f8ef730;
+      border: 1px solid #5b7cf725;
+      border-radius: 24px;
+      padding: 5px 14px;
+      letter-spacing: 0.3px;
+    }
+    .clock {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 4px 12px;
+      padding: 5px 14px;
     }
 
     /* ── Layout ── */
     .main-grid {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 20px;
+      grid-template-columns: 1fr 420px;
+      gap: 24px;
+      align-items: start;
     }
-
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .main-grid { grid-template-columns: 1fr; }
     }
 
@@ -80,83 +127,147 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      transition: var(--transition);
     }
+    .card:hover { border-color: #2d3154; }
     .card-header {
       padding: 14px 20px;
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
-      font-weight: 600; font-size: 0.9rem;
+      font-weight: 600; font-size: 0.88rem;
     }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:.4; } }
-    .dot.amber { background: var(--amber); }
+    .dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:.4; transform:scale(.85); } }
+    .dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+    .dot.red   { background: var(--red);   box-shadow: 0 0 8px var(--red); }
 
     .card-body { padding: 20px; }
 
     /* ── Webcam ── */
-    #webcam {
-      width: 100%;
-      border-radius: 8px;
+    .webcam-wrapper {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
       background: #000;
-      display: block;
       aspect-ratio: 4/3;
+    }
+    #webcam {
+      width: 100%; height: 100%;
+      border-radius: 10px;
+      display: block;
       object-fit: cover;
+      transform: scaleX(-1);
     }
     canvas { display: none; }
+
+    /* Face guide overlay */
+    .face-guide {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+      opacity: 0.35;
+      transition: opacity .3s;
+    }
+    .face-guide.hidden { opacity: 0; }
+    .face-circle {
+      width: 200px; height: 200px;
+      border: 2px dashed #fff5;
+      border-radius: 50%;
+      animation: guideRotate 8s linear infinite;
+    }
+    @keyframes guideRotate { 100% { transform: rotate(360deg); } }
+
+    /* Scan line effect */
+    .scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .scan-line.active {
+      animation: scanDown 1.2s ease-in-out;
+    }
+    @keyframes scanDown {
+      0%   { top: 0; opacity: 0.8; }
+      100% { top: 100%; opacity: 0; }
+    }
 
     /* ── Status bar ── */
     #status {
       margin-top: 14px;
       padding: 12px 16px;
-      border-radius: 8px;
-      background: #1a1d2e;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
       border-left: 4px solid var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-family: 'JetBrains Mono', monospace;
-      transition: border-color .3s, color .3s;
+      transition: border-color .3s, color .3s, background .3s;
       min-height: 46px;
       display: flex; align-items: center; gap: 8px;
     }
-    #status.ok   { border-color: var(--green); color: var(--green); }
-    #status.err  { border-color: var(--red);   color: var(--red);   }
-    #status.warn { border-color: var(--amber);  color: var(--amber); }
+    #status.ok   { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+    #status.err  { border-color: var(--red);    color: var(--red);    background: var(--red-dim); }
+    #status.warn { border-color: var(--amber);   color: var(--amber);  background: var(--amber-dim); }
     #status.loading { border-color: var(--accent); color: var(--accent); }
 
     /* ── Attendance button ── */
     .attend-btn {
       margin-top: 14px;
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--green), #16a34a);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #34d399, #059669);
       color: #fff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
-      letter-spacing: .3px;
-      transition: opacity .2s, transform .1s;
+      letter-spacing: 0.3px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
     }
-    .attend-btn:hover   { opacity: .88; }
-    .attend-btn:active  { transform: scale(.98); }
+    .attend-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.1), transparent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .attend-btn:hover::before { opacity: 1; }
+    .attend-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px #05966940; }
+    .attend-btn:active { transform: scale(.985); }
+    .attend-btn:disabled {
+      opacity: .5; cursor: not-allowed; transform: none; box-shadow: none;
+    }
 
     /* ── Tabs ── */
     .tabs { display: flex; border-bottom: 1px solid var(--border); }
     .tab {
-      padding: 12px 20px;
+      padding: 13px 20px;
       font-size: .85rem;
       font-weight: 600;
       cursor: pointer;
       color: var(--muted);
       border-bottom: 2px solid transparent;
-      transition: color .2s, border-color .2s;
+      transition: var(--transition);
       user-select: none;
     }
+    .tab:hover { color: var(--text-secondary); }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-panel.active { display: block; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
     /* ── Form ── */
     .form-grid {
@@ -164,40 +275,46 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
+    @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1 / -1; }
-    label { font-size: .78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    label {
+      font-size: .72rem; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .8px;
+    }
 
     input, select {
-      padding: 10px 12px;
+      padding: 10px 14px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 7px;
+      border-radius: var(--radius-sm);
       color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: .88rem;
       outline: none;
-      transition: border-color .2s;
+      transition: var(--transition);
     }
-    input:focus, select:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); opacity: .6; }
+    input:focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px #5b7cf715; }
     select option { background: var(--surface); }
 
     .reg-btn {
       width: 100%;
       margin-top: 18px;
-      padding: 12px;
+      padding: 13px;
       border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent), var(--purple));
       color: #fff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .95rem;
+      font-family: 'Inter', sans-serif;
+      font-size: .92rem;
       font-weight: 700;
       cursor: pointer;
       letter-spacing: .3px;
-      transition: opacity .2s;
+      transition: var(--transition);
     }
-    .reg-btn:hover { opacity: .85; }
+    .reg-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px #5b7cf730; }
+    .reg-btn:active { transform: scale(.985); }
 
     /* ── Export section ── */
     .export-row {
@@ -205,68 +322,187 @@
     }
     .export-row .form-group { flex: 1; min-width: 140px; }
     .export-btn {
-      padding: 10px 18px;
-      border: none; border-radius: 7px;
-      background: var(--amber);
+      padding: 10px 20px;
+      border: none; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--amber), #d97706);
       color: #000;
-      font-weight: 700; font-size: .88rem;
+      font-weight: 700; font-size: .85rem;
+      font-family: 'Inter', sans-serif;
       cursor: pointer; white-space: nowrap;
-      transition: opacity .2s;
+      transition: var(--transition);
     }
-    .export-btn:hover { opacity: .85; }
+    .export-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px #fbbf2430; }
 
     /* ── Today's log table ── */
-    .log-wrap { overflow-x: auto; margin-top: 16px; }
+    .log-wrap { overflow-x: auto; margin-top: 12px; border-radius: var(--radius-sm); }
     table { width: 100%; border-collapse: collapse; font-size: .82rem; }
     th {
-      text-align: left; padding: 9px 12px;
+      text-align: left; padding: 10px 14px;
       background: var(--surface);
       color: var(--muted);
       font-weight: 600;
-      text-transform: uppercase; letter-spacing: .4px;
+      text-transform: uppercase; letter-spacing: .5px;
+      font-size: .72rem;
       border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
     }
     td {
-      padding: 9px 12px;
-      border-bottom: 1px solid #1e2235;
+      padding: 10px 14px;
+      border-bottom: 1px solid #1a1d30;
       color: var(--text);
+      transition: background .15s;
     }
+    tr:hover td { background: #ffffff05; }
     tr:last-child td { border-bottom: none; }
     .badge {
-      display: inline-block; padding: 2px 8px;
-      border-radius: 20px; font-size: .75rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px; font-size: .72rem; font-weight: 600;
+      letter-spacing: 0.3px;
     }
-    .badge.present { background: #22c55e22; color: var(--green); border: 1px solid #22c55e44; }
-    .badge.exit    { background: #ef444422; color: var(--red);   border: 1px solid #ef444444; }
+    .badge.present { background: var(--green-dim); color: var(--green); border: 1px solid #34d39930; }
+    .badge.exit    { background: var(--red-dim);   color: var(--red);   border: 1px solid #f8717130; }
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
     .empty-state {
-      text-align: center; padding: 32px 0;
-      color: var(--muted); font-size: .9rem;
+      text-align: center; padding: 40px 0;
+      color: var(--muted); font-size: .88rem;
+    }
+    .empty-state .icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+
+    /* ── Toast notifications ── */
+    .toast-container {
+      position: fixed; top: 20px; right: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      z-index: 1000; pointer-events: none;
+    }
+    .toast {
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      font-size: .85rem; font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn .35s cubic-bezier(.4,0,.2,1);
+      pointer-events: auto;
+      max-width: 380px;
+    }
+    .toast.success { background: #065f46; color: #6ee7b7; border: 1px solid #059669; }
+    .toast.error   { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+    .toast.info    { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes toastOut {
+      to { opacity: 0; transform: translateX(40px); }
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex; gap: 12px; margin-bottom: 20px;
+    }
+    .stat {
+      flex: 1;
+      padding: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.5rem; font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-value.green { color: var(--green); }
+    .stat-value.amber { color: var(--amber); }
+    .stat-value.accent { color: var(--accent); }
+    .stat-label {
+      font-size: .7rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .8px;
+      margin-top: 4px; font-weight: 600;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      z-index: 999;
+      animation: confettiFall 1.5s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(400px) rotate(720deg) scale(0.3); }
     }
   </style>
 </head>
 <body>
 
+<div class="toast-container" id="toastContainer"></div>
+
 <header>
   <div class="logo">
     <div class="logo-icon">🎓</div>
-    <div>
+    <div class="logo-text">
       <h1>DBIT <span>Attendance</span></h1>
-      <div style="font-size:.75rem;color:var(--muted);margin-top:2px">Face Recognition System</div>
+      <p>Face Recognition System</p>
     </div>
   </div>
-  <span class="chip">ArcFace · Local Edge API</span>
+  <div class="header-right">
+    <div class="clock" id="clock"></div>
+    <span class="chip">ArcFace · Local</span>
+  </div>
 </header>
+
+<!-- Stats -->
+<div class="stats-bar" id="statsBar" style="max-width:1200px;margin:0 auto 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 4px;">
+  <div class="stat">
+    <div class="stat-value green" id="statPresent">0</div>
+    <div class="stat-label">Present Today</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value amber" id="statExits">0</div>
+    <div class="stat-label">Exits Today</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value accent" id="statTotal">0</div>
+    <div class="stat-label">Total Records</div>
+  </div>
+</div>
 
 <div class="main-grid">
 
   <div>
     <div class="card">
       <div class="card-header">
-        <span class="dot"></span> Live Camera Feed
+        <span class="dot" id="camDot"></span> <span id="camHeader">Live Camera Feed</span>
       </div>
       <div class="card-body">
-        <video id="webcam" autoplay playsinline muted></video>
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <div class="webcam-wrapper">
+          <video id="webcam" autoplay playsinline muted></video>
+          <canvas id="canvas" width="640" height="480"></canvas>
+          <div class="face-guide" id="faceGuide">
+            <div class="face-circle"></div>
+          </div>
+          <div class="scan-line" id="scanLine"></div>
+        </div>
         <div id="status">⏳ Initialising camera…</div>
         <button class="attend-btn" id="captureBtn">📸 &nbsp;Mark Attendance</button>
       </div>
@@ -307,13 +543,13 @@
             </select>
           </div>
         </div>
-        <div id="reg-status" style="margin-top:12px;font-size:.85rem;min-height:20px;color:var(--muted)"></div>
+        <div id="reg-status" style="margin-top:12px;font-size:.82rem;min-height:20px;color:var(--muted)"></div>
         <button class="reg-btn" id="registerBtn">📷 &nbsp;Capture & Register</button>
       </div>
 
       <div class="tab-panel card-body" id="panel-export">
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px;">
-          Download the attendance log as a CSV file. Teachers can open it in Excel to mark absent/present.
+        <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.5;">
+          Download the attendance log as a CSV file. Teachers can open it in Excel.
         </p>
         <div class="export-row">
           <div class="form-group">
@@ -322,18 +558,18 @@
           </div>
           <button class="export-btn" id="exportBtn">⬇ Download CSV</button>
         </div>
-        <p style="margin-top:14px;font-size:.78rem;color:var(--muted);">
-          Leave date blank to export <strong style="color:var(--text)">all records</strong>.
+        <p style="margin-top:14px;font-size:.75rem;color:var(--muted);">
+          Leave date blank to export <strong style="color:var(--text-secondary)">all records</strong>.
         </p>
       </div>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <span class="dot amber"></span> Today's Attendance
-        <span style="margin-left:auto;font-size:.8rem;color:var(--muted);font-weight:400" id="record-count"></span>
+        <span class="dot amber" id="logDot"></span> Today's Attendance
+        <span style="margin-left:auto;font-size:.78rem;color:var(--muted);font-weight:400" id="record-count"></span>
       </div>
-      <div class="card-body" style="padding-top:8px;">
+      <div class="card-body" style="padding-top:8px;max-height:340px;overflow-y:auto;">
         <div class="log-wrap">
           <table id="log-table">
             <thead>
@@ -342,7 +578,7 @@
               </tr>
             </thead>
             <tbody id="log-body">
-              <tr><td colspan="5"><div class="empty-state">No records yet today</div></td></tr>
+              <tr><td colspan="5"><div class="empty-state"><span class="icon">📋</span>No records yet today</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -356,20 +592,75 @@
   const API = 'http://127.0.0.1:5000';
   const video    = document.getElementById('webcam');
   const canvas   = document.getElementById('canvas');
-  const status   = document.getElementById('status');
+  const statusEl = document.getElementById('status');
   const regStatus = document.getElementById('reg-status');
+  const scanLine = document.getElementById('scanLine');
+  const faceGuide = document.getElementById('faceGuide');
+  let cameraReady = false;
 
-  // ── Camera ────────────────────────────────────────────────────────────────
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+  // ── Clock ──────────────────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    const d = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    document.getElementById('clock').textContent = `${d}  ${h}:${m}:${s}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── Toast ──────────────────────────────────────────────────────────────
+  function showToast(msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastOut .3s ease forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  // ── Confetti ───────────────────────────────────────────────────────────
+  function fireConfetti() {
+    const colors = ['#34d399', '#5b7cf7', '#fbbf24', '#a78bfa', '#f87171', '#38bdf8'];
+    for (let i = 0; i < 30; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = (30 + Math.random() * 40) + 'vw';
+      el.style.top = (10 + Math.random() * 20) + 'vh';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDuration = (1 + Math.random()) + 's';
+      el.style.animationDelay = (Math.random() * 0.3) + 's';
+      el.style.width = (4 + Math.random() * 6) + 'px';
+      el.style.height = (4 + Math.random() * 6) + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }
+  }
+
+  // ── Camera ─────────────────────────────────────────────────────────────
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } })
     .then(stream => {
       video.srcObject = stream;
-      setStatus('✅ Camera ready. Position your face and click Mark Attendance.', 'ok');
+      cameraReady = true;
+      setStatus('Camera ready. Position your face and click Mark Attendance.', 'ok');
+      document.getElementById('camDot').className = 'dot';
+      document.getElementById('camHeader').textContent = 'Live Camera Feed — Active';
+      faceGuide.classList.remove('hidden');
+      showToast('Camera connected successfully', 'success');
     })
-    .catch(() => setStatus('❌ Cannot access webcam.', 'err'));
+    .catch(() => {
+      setStatus('Cannot access webcam. Check permissions.', 'err');
+      document.getElementById('camDot').className = 'dot red';
+      showToast('Webcam access denied', 'error');
+    });
 
   function setStatus(msg, cls = '') {
-    status.textContent = msg;
-    status.className = cls;
+    statusEl.textContent = msg;
+    statusEl.className = cls;
   }
 
   function getBlob(cb) {
@@ -378,7 +669,7 @@
     canvas.toBlob(cb, 'image/jpeg', 0.92);
   }
 
-  // ── Tabs ──────────────────────────────────────────────────────────────────
+  // ── Tabs ───────────────────────────────────────────────────────────────
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -388,40 +679,70 @@
     });
   });
 
-  // ── Mark Attendance ───────────────────────────────────────────────────────
+  // ── Mark Attendance ────────────────────────────────────────────────────
   document.getElementById('captureBtn').addEventListener('click', () => {
-    setStatus('🔍 Scanning face…', 'loading');
+    if (!cameraReady) { showToast('Camera not ready', 'error'); return; }
+
+    const btn = document.getElementById('captureBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> &nbsp;Scanning…';
+    setStatus('Scanning face…', 'loading');
+    faceGuide.classList.add('hidden');
+    scanLine.classList.remove('active');
+    void scanLine.offsetWidth;
+    scanLine.classList.add('active');
+
     getBlob(blob => {
       const fd = new FormData();
       fd.append('image', blob, 'frame.jpg');
       fetch(`${API}/recognize`, { method: 'POST', body: fd })
         .then(r => r.json())
         .then(d => {
+          btn.disabled = false;
+          btn.innerHTML = '📸 &nbsp;Mark Attendance';
+          faceGuide.classList.remove('hidden');
+          scanLine.classList.remove('active');
+
           if (d.status === 'success') {
-            setStatus(`✅ ${d.message}`, 'ok');
+            const msg = d.duplicate ? d.message : `${d.message} (${d.confidence}% confidence)`;
+            setStatus(msg, 'ok');
+            showToast(d.message, 'success');
+            if (!d.duplicate) fireConfetti();
             refreshLog();
           } else {
-            setStatus(`⚠️ ${d.message || 'Not recognised.'}`, 'warn');
+            setStatus(d.message || 'Not recognised.', 'warn');
+            showToast(d.message || 'Face not recognised', 'error');
           }
         })
-        .catch(() => setStatus('❌ Server unreachable.', 'err'));
+        .catch(() => {
+          btn.disabled = false;
+          btn.innerHTML = '📸 &nbsp;Mark Attendance';
+          faceGuide.classList.remove('hidden');
+          setStatus('Server unreachable. Is app.py running?', 'err');
+          showToast('Server unreachable', 'error');
+        });
     });
   });
 
-  // ── Register ──────────────────────────────────────────────────────────────
+  // ── Register ───────────────────────────────────────────────────────────
   document.getElementById('registerBtn').addEventListener('click', () => {
+    if (!cameraReady) { showToast('Camera not ready', 'error'); return; }
+
     const roll = document.getElementById('roll').value.trim().toUpperCase();
     const name = document.getElementById('name').value.trim();
     const div  = document.getElementById('division').value;
     const dept = document.getElementById('department').value;
 
     if (!roll || !name) {
-      regStatus.textContent = '⚠️ Roll number and name are required.';
+      regStatus.textContent = '⚠ Roll number and name are required.';
       regStatus.style.color = 'var(--amber)';
       return;
     }
 
-    regStatus.textContent = '📡 Processing locally…';
+    const btn = document.getElementById('registerBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> &nbsp;Processing…';
+    regStatus.textContent = 'Processing locally…';
     regStatus.style.color = 'var(--accent)';
 
     getBlob(blob => {
@@ -435,40 +756,59 @@
       fetch(`${API}/register`, { method: 'POST', body: fd })
         .then(r => r.json())
         .then(d => {
+          btn.disabled = false;
+          btn.innerHTML = '📷 &nbsp;Capture & Register';
           if (d.status === 'success') {
             regStatus.textContent = '✅ ' + d.message;
             regStatus.style.color = 'var(--green)';
             document.getElementById('roll').value = '';
             document.getElementById('name').value = '';
+            showToast(d.message, 'success');
+            refreshStudents();
           } else {
             regStatus.textContent = '❌ ' + (d.error || 'Registration failed.');
             regStatus.style.color = 'var(--red)';
+            showToast(d.error || 'Registration failed', 'error');
           }
         })
         .catch(() => {
+          btn.disabled = false;
+          btn.innerHTML = '📷 &nbsp;Capture & Register';
           regStatus.textContent = '❌ Server unreachable.';
           regStatus.style.color = 'var(--red)';
+          showToast('Server unreachable', 'error');
         });
     });
   });
 
-  // ── Export CSV ────────────────────────────────────────────────────────────
+  // ── Export CSV ─────────────────────────────────────────────────────────
   document.getElementById('exportBtn').addEventListener('click', () => {
     const date = document.getElementById('exportDate').value;
     let url = `${API}/export_csv`;
     if (date) url += `?date=${date}`;
     window.open(url, '_blank');
+    showToast('CSV download started', 'info');
   });
 
-  // ── Today's log table ─────────────────────────────────────────────────────
+  // ── Today's log table ──────────────────────────────────────────────────
   function refreshLog() {
     fetch(`${API}/attendance_today`)
       .then(r => r.json())
       .then(rows => {
         const tbody = document.getElementById('log-body');
+        const presentCount = rows.filter(r => r['Status'] === 'present').length;
+        const exitCount = rows.filter(r => r['Status'] === 'exit').length;
+
         document.getElementById('record-count').textContent = `${rows.length} record${rows.length !== 1 ? 's' : ''}`;
+        document.getElementById('statPresent').textContent = presentCount;
+        document.getElementById('statExits').textContent = exitCount;
+        document.getElementById('statTotal').textContent = rows.length;
+
+        const logDot = document.getElementById('logDot');
+        logDot.className = rows.length > 0 ? 'dot amber' : 'dot red';
+
         if (!rows.length) {
-          tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">No records yet today</div></td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><span class="icon">📋</span>No records yet today</div></td></tr>';
           return;
         }
         tbody.innerHTML = rows.slice().reverse().map(r => {
@@ -477,10 +817,10 @@
             ? '<span class="badge present">present</span>'
             : '<span class="badge exit">exit</span>';
           return `<tr>
-            <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${r['Roll No'] || '—'}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent)">${r['Roll No'] || '—'}</td>
             <td>${r['Name'] || '—'}</td>
             <td style="text-align:center">${r['Division'] || '—'}</td>
-            <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${time}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted)">${time}</td>
             <td>${badge}</td>
           </tr>`;
         }).join('');
@@ -488,9 +828,23 @@
       .catch(() => {});
   }
 
-  // Refresh on load and every 30 s
+  function refreshStudents() {
+    // Just a placeholder if we ever add a student count stat
+  }
+
   refreshLog();
-  setInterval(refreshLog, 30000);
+  setInterval(refreshLog, 15000);
+
+  // ── Health check ───────────────────────────────────────────────────────
+  fetch(`${API}/health`).then(r => r.json()).then(d => {
+    if (d.status === 'ok') {
+      document.getElementById('camDot').className = cameraReady ? 'dot' : 'dot red';
+    }
+  }).catch(() => {
+    showToast('Backend not reachable. Start with: python app.py', 'error');
+    document.getElementById('camDot').className = 'dot red';
+    document.getElementById('camHeader').textContent = 'Live Camera Feed — Backend Offline';
+  });
 </script>
 </body>
 </html>
