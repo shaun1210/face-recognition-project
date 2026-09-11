@@ -13,6 +13,14 @@ from deepface import DeepFace
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
+# Optimize TensorFlow for low-memory cloud instances (e.g. Render Free Tier 512MB RAM)
+try:
+    import tensorflow as tf
+    tf.config.threading.set_inter_op_parallelism_threads(1)
+    tf.config.threading.set_intra_op_parallelism_threads(1)
+except Exception:
+    pass
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
