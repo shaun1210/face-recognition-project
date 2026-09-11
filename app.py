@@ -380,6 +380,14 @@ def export_csv():
     )
 
 
+@app.route('/')
+def index():
+    frontend_index = os.path.join(BASE_DIR, 'frontend', 'index.html')
+    if os.path.exists(frontend_index):
+        return send_file(frontend_index)
+    return jsonify({"service": "DBIT Face Attendance API", "status": "running"}), 200
+
+
 @app.route('/students', methods=['GET'])
 def list_students():
     return jsonify(load_students())
@@ -398,5 +406,8 @@ def attendance_today():
 
 
 if __name__ == '__main__':
-    log.info('Starting DBIT Face Attendance API on port 5000')
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    log.info(f'Starting DBIT Face Attendance API on port {port}')
+    app.run(debug=False, host='0.0.0.0', port=port)
+
+

@@ -1,0 +1,37 @@
+# Virtual Environments
+venv/
+env/
+.venv/
+ENV/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# DeepFace Representation Cache
+db/*.pkl
+*.pkl
+
+# Log files
+*.log
+log.txt
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build & Distribution
+build/
+dist/
+*.egg-info/

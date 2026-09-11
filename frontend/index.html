@@ -589,7 +589,15 @@
 </div>
 
 <script>
-  const API = 'http://127.0.0.1:5000';
+  // Dynamic API detection: works on Render, local Flask server, or standalone file
+  const API = (() => {
+    if (window.location.protocol === 'file:') return 'http://127.0.0.1:5000';
+    if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '5000' && window.location.port !== '') {
+      return 'http://127.0.0.1:5000';
+    }
+    return window.location.origin;
+  })();
+
   const video    = document.getElementById('webcam');
   const canvas   = document.getElementById('canvas');
   const statusEl = document.getElementById('status');
